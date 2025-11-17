@@ -1,0 +1,162 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TribalPages Agent (No Auth)",
+    "version": "1.0.0",
+    "description": "Endpoints exposed from local FastAPI via ngrok."
+  },
+  "servers": [
+    {
+      "url": "https://rachell-hyperosmic-clavately.ngrok-free.dev"
+    }
+  ],
+  "paths": {
+    "/session-status": {
+      "get": {
+        "summary": "Check session/login status",
+        "operationId": "sessionStatus",
+        "responses": {
+          "200": {
+            "description": "Session status response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "has_session_file": { "type": "boolean" },
+                    "page_url": { "type": ["string", "null"] }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "summary": "Search TribalPages by name",
+        "operationId": "searchPerson",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string" }
+                },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "query": { "type": "string" },
+                    "matches": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": { "type": "integer" },
+                          "label": { "type": "string" },
+                          "url": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fetch-person": {
+      "post": {
+        "summary": "Fetch selected person details",
+        "operationId": "fetchPerson",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string" },
+                  "pick_index": { "type": "integer" }
+                },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Detailed person facts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "query": { "type": "string" },
+                    "selection": {
+                      "type": "object",
+                      "properties": {
+                        "index": { "type": "integer" },
+                        "label": { "type": "string" },
+                        "url": { "type": "string" }
+                      }
+                    },
+                    "facts": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "lifespan": { "type": "string" },
+                        "father": { "type": "string" },
+                        "mother": { "type": "string" },
+                        "spouse": { "type": "string" },
+                        "husband": { "type": "string" },
+                        "wife": { "type": "string" },
+                        "children": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "siblings": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "raw_text": { "type": "string" }
+                      }
+                    },
+                    "matches": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": { "type": "integer" },
+                          "label": { "type": "string" },
+                          "url": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
